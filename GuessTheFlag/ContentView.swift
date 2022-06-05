@@ -11,8 +11,11 @@ struct ContentView: View {
     @State private var countries: Array<String> = ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctFlag: Int = Int.random(in: 0...2)
     @State private var scorePresented: Bool = false
+    @State private var endGamePresented: Bool = false
     @State private var playerScore: Int = 0
     @State private var answerText: String = ""
+    @State private var answeredQuestions: Int = 0
+    private var maxQuestions: Int = 10
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [.mint, .indigo]), startPoint: .top, endPoint: .bottom).ignoresSafeArea()
@@ -36,11 +39,11 @@ struct ContentView: View {
                             } else {
                                 answerText = "Oups 😢, that was the flag of \(countries[i])"
                             }
+                            answeredQuestions += 1
                             scorePresented = true
                         } label: {
                             Image(countries[i])
                                 .renderingMode(.original)
-                                //.clipShape(Capsule(style: .continuous))
                                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                 .shadow(radius: 10)
                                 .padding()
@@ -59,11 +62,25 @@ struct ContentView: View {
             }.padding(30)
         }.alert(answerText, isPresented: $scorePresented) {
             Button("OK", role: .cancel) {
+                if answeredQuestions == maxQuestions {
+                    endGamePresented = true
+                } else {
+                    countries.shuffle()
+                    correctFlag = Int.random(in: 0...2)
+                }
+            }
+        } message: {
+            Text("Your have found \(playerScore) flags")
+        }
+        .alert("Game over", isPresented: $endGamePresented) {
+            Button("New game") {
+                playerScore = 0
+                answeredQuestions = 0
                 countries.shuffle()
                 correctFlag = Int.random(in: 0...2)
             }
         } message: {
-            Text("Your have found \(playerScore) flags")
+            Text("You found \(playerScore) out of \(maxQuestions) correctly")
         }
     }
 }
