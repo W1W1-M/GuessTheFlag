@@ -42,11 +42,7 @@ struct ContentView: View {
                             answeredQuestions += 1
                             scorePresented = true
                         } label: {
-                            Image(countries[i])
-                                .renderingMode(.original)
-                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                                .shadow(radius: 10)
-                                .padding()
+                            FlagView(country: countries[i])
                         }
                     }
                 }.frame(maxWidth: .infinity)
@@ -82,6 +78,17 @@ struct ContentView: View {
         } message: {
             Text("You found \(playerScore) out of \(maxQuestions) correctly")
         }
+    }
+}
+
+struct FlagView: View {
+    var country: String
+    var body: some View {
+        Image(country)
+            .renderingMode(.original)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .shadow(radius: 10)
+            .padding()
     }
 }
 
