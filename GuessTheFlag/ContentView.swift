@@ -21,8 +21,7 @@ struct ContentView: View {
             LinearGradient(gradient: Gradient(colors: [.mint, .indigo]), startPoint: .top, endPoint: .bottom).ignoresSafeArea()
             VStack {
                 Text("Guess the Flag")
-                    .font(.largeTitle.bold())
-                    .foregroundStyle(.primary)
+                    .bigIndigoTitleStyle()
                 Spacer()
                 VStack {
                     Text("Pick the flag of")
@@ -89,6 +88,20 @@ struct FlagView: View {
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .shadow(radius: 10)
             .padding()
+    }
+}
+
+struct BigIndigoTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle.bold())
+            .foregroundStyle(.indigo)
+    }
+}
+
+extension View {
+    func bigIndigoTitleStyle() -> some View {
+        modifier(BigIndigoTitle())
     }
 }
 
